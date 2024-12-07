@@ -22,3 +22,6 @@ class TestLeafNode(unittest.TestCase):
         node = LeafNode(tag='p', value='no props')
         expected = f"<{'p'}>{'no props'}</{'p'}>"
         self.assertEqual(node.to_html(), expected)
+
+if __name__ == "__main__":
+    unittest.main()

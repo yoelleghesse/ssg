@@ -34,3 +34,6 @@ class TestHTMLNode(unittest.TestCase):
         node = HTMLNode(tag='div', props={"href": "https://www.google.com"})
         expected = "HTMLNode(tag='div', value=None, children=[], props='href=\"https://www.google.com\"')"
         assert repr(node) == expected
+
+if __name__ == "__main__":
+    unittest.main()
