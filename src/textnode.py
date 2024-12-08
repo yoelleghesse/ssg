@@ -42,4 +42,20 @@ class TextNode:
             return LeafNode("img", "", {"src": text_node.url, "alt": text_node.text})
         raise ValueError(f"Invalid text type {text_node.text_type}")
     
+    def split_nodes_delimiter(old_nodes, delimiter, text_type):
+        new_lst = []
+        for node in old_nodes:
+            if node.text_type == TextType.NORMAL_TEXT:
+                parts = node.text.split(delimiter)
+                for i, part in enumerate(parts):
+                    if i % 2 == 0:
+                        new_lst.append(TextNode(part, TextType.NORMAL_TEXT))
+                    else:
+                        new_lst.append(TextNode(part, text_type))
+            else:
+                new_lst.append(node)
+        return new_lst
+
+
+    
         
