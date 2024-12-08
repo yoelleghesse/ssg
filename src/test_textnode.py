@@ -31,6 +31,10 @@ class TestTextNode(unittest.TestCase):
         node2 = TextNode("This is a text node", TextType.BOLD_TEXT, url="https://example.com")
         self.assertNotEqual(node, node2)
 
+    def test_invalid_text_type(self):
+        text_node = TextNode(text="Sample text", text_type="invalid", url=None)
+        with self.assertRaises(ValueError):
+            TextNode.text_node_to_html_node(text_node)
 
 if __name__ == "__main__":
     unittest.main()
