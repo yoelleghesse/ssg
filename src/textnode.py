@@ -1,4 +1,5 @@
 from enum import Enum
+import re
 from leafnode import LeafNode
 
 class TextType(Enum):
@@ -56,6 +57,12 @@ class TextNode:
                 new_lst.append(node)
         return new_lst
 
+    def extract_markdown_images(text):
+        return re.findall(r"!\[([^\[\]]*)\]\(([^\(\)]*)\)", text)
+
+    def extract_markdown_links(text):
+        return re.findall(r"(?<!!)\[([^\[\]]*)\]\(([^\(\)]*)\)", text)
+        
 
     
         

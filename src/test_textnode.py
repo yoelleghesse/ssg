@@ -55,7 +55,7 @@ class TestTextNode(unittest.TestCase):
             TextNode("", TextType.NORMAL_TEXT)
         ]
         self.assertEqual(new_nodes, expected)
-        
+
     def test_split_delimiter_italic(self):
         old_nodes = [TextNode("This is text with a *italic word*", TextType.NORMAL_TEXT)]
         new_nodes = TextNode.split_nodes_delimiter(old_nodes, "*", TextType.ITALIC_TEXT)
@@ -65,6 +65,18 @@ class TestTextNode(unittest.TestCase):
             TextNode("", TextType.NORMAL_TEXT)
         ]
         self.assertEqual(new_nodes, expected)
+
+    def test_extract_markdown_images(self):
+        text = "This is text with a ![rick roll](https://i.imgur.com/aKaOqIh.gif) and ![obi wan](https://i.imgur.com/fJRm4Vk.jpeg)"
+        match = TextNode.extract_markdown_images(text)
+        expected = [("rick roll", "https://i.imgur.com/aKaOqIh.gif"), ("obi wan", "https://i.imgur.com/fJRm4Vk.jpeg")]
+        self.assertEqual(match, expected)
+
+    def test_extract_markdown_links(self):
+        text = "This is text with a link [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)"
+        match = TextNode.extract_markdown_links(text)
+        expected = [("to boot dev", "https://www.boot.dev"), ("to youtube", "https://www.youtube.com/@bootdotdev")]
+        self.assertEqual(match, expected)
                               
 
 if __name__ == "__main__":
