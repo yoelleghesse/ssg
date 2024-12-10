@@ -62,6 +62,40 @@ class TextNode:
 
     def extract_markdown_links(text):
         return re.findall(r"(?<!!)\[([^\[\]]*)\]\(([^\(\)]*)\)", text)
+
+    def split_nodes_link(old_nodes):
+        new_lst = []
+        link_pattern = r"\[([^\[\]]+)\]\(([^\(\)]+)\)"
+        for node in old_nodes:
+            if not isinstance(node, TextNode) or node.text_type != TextType.NORMAL_TEXT:
+                new_lst.append(node)
+                continue
+            parts = re.split(link_pattern, node.text)
+            for i in range(len(parts)):
+                if i % 3 == 0 and parts[i]:  # Normal text
+                    new_lst.append(TextNode(parts[i], TextType.NORMAL_TEXT))
+                elif i % 3 == 1:  # Link text
+                    link_text = parts[i]
+                    url = parts[i + 1] if i + 1 < len(parts) else ""
+                    new_lst.append(TextNode(link_text, TextType.LINK_TEXT, url))
+        return [node for node in new_lst if node.text]
+    
+    def split_nodes_image(old_nodes):
+        new_lst = []
+        image_pattern = r"!\[([^\[\]]*)\]\(([^\(\)]*)\)"
+        for node in old_nodes:
+            if not isinstance(node, TextNode) or node.text_type != TextType.NORMAL_TEXT:
+                new_lst.append(node)
+                continue
+            parts = re.split(image_pattern, node.text)
+            for i in range(len(parts)):
+                if i % 3 == 0 and parts[i]:  # Normal text
+                    new_lst.append(TextNode(parts[i], TextType.NORMAL_TEXT))
+                elif i % 3 == 1:  # Image alt text
+                    alt_text = parts[i]
+                    url = parts[i + 1] if i + 1 < len(parts) else ""
+                    new_lst.append(TextNode(alt_text, TextType.IMAGE_TEXT, url))
+        return [node for node in new_lst if node.text]
         
 
     

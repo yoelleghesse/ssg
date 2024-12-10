@@ -78,6 +78,30 @@ class TestTextNode(unittest.TestCase):
         expected = [("to boot dev", "https://www.boot.dev"), ("to youtube", "https://www.youtube.com/@bootdotdev")]
         self.assertEqual(match, expected)
                               
+    def test_split_nodes_link(self):
+        node = TextNode("This is text with a link [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)",TextType.NORMAL_TEXT)
+        expected = [
+            TextNode("This is text with a link ", TextType.NORMAL_TEXT),
+            TextNode("to boot dev", TextType.LINK_TEXT, "https://www.boot.dev"),
+            TextNode(" and ", TextType.NORMAL_TEXT),
+            TextNode("to youtube", TextType.LINK_TEXT, "https://www.youtube.com/@bootdotdev")
+            ]
+        self.assertEqual(TextNode.split_nodes_link([node]), expected)
+
+    def test_split_nodes_image(self):
+        node = TextNode("This is text with an image ![rick roll](https://i.imgur.com/aKaOqIh.gif) and ![obi wan](https://i.imgur.com/fJRm4Vk.jpeg)",TextType.NORMAL_TEXT)
+        expected = [
+            TextNode("This is text with an image ", TextType.NORMAL_TEXT),
+            TextNode("rick roll", TextType.IMAGE_TEXT, "https://i.imgur.com/aKaOqIh.gif"),
+            TextNode(" and ", TextType.NORMAL_TEXT),
+            TextNode("obi wan", TextType.IMAGE_TEXT, "https://i.imgur.com/fJRm4Vk.jpeg"),
+        ]
+        self.assertEqual(TextNode.split_nodes_image([node]), expected)
+
+
+    
+
+
 
 if __name__ == "__main__":
     unittest.main()
