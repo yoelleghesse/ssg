@@ -116,7 +116,16 @@ class TextNode:
         return new_nodes
     
     def text_to_textnodes(text):
-        return 
+        nodes = [TextNode(text, TextType.NORMAL_TEXT)]
+        nodes = TextNode.split_nodes_image(nodes)
+        nodes = TextNode.split_nodes_link(nodes)
+        
+        nodes = TextNode.split_nodes_delimiter(nodes, "**", TextType.BOLD_TEXT)
+        nodes = TextNode.split_nodes_delimiter(nodes, "*", TextType.ITALIC_TEXT)
+        nodes = TextNode.split_nodes_delimiter(nodes, "`", TextType.CODE_TEXT)
+
+        return nodes
+
         
 
     
