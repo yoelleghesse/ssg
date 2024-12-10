@@ -64,38 +64,59 @@ class TextNode:
         return re.findall(r"(?<!!)\[([^\[\]]*)\]\(([^\(\)]*)\)", text)
 
     def split_nodes_link(old_nodes):
-        new_lst = []
-        link_pattern = r"\[([^\[\]]+)\]\(([^\(\)]+)\)"
-        for node in old_nodes:
-            if not isinstance(node, TextNode) or node.text_type != TextType.NORMAL_TEXT:
-                new_lst.append(node)
+        new_nodes = []
+        for old_node in old_nodes:
+            if old_node.text_type != TextType.NORMAL_TEXT:
+                new_nodes.append(old_node)
                 continue
-            parts = re.split(link_pattern, node.text)
-            for i in range(len(parts)):
-                if i % 3 == 0 and parts[i]:  # Normal text
-                    new_lst.append(TextNode(parts[i], TextType.NORMAL_TEXT))
-                elif i % 3 == 1:  # Link text
-                    link_text = parts[i]
-                    url = parts[i + 1] if i + 1 < len(parts) else ""
-                    new_lst.append(TextNode(link_text, TextType.LINK_TEXT, url))
-        return [node for node in new_lst if node.text]
+            original_text = old_node.text
+            links = TextNode.extract_markdown_links(original_text)
+            if len(links) == 0:
+                new_nodes.append(old_node)
+                continue
+            for link in links:
+                sections = original_text.split(f"[{link[0]}]({link[1]})", 1)
+                if len(sections) != 2:
+                    raise ValueError("Invalid markdown, link section not closed")
+                if sections[0] != "":
+                    new_nodes.append(TextNode(sections[0], TextType.NORMAL_TEXT))
+                new_nodes.append(TextNode(link[0], TextType.LINK_TEXT, link[1]))
+                original_text = sections[1]
+            if original_text != "":
+                new_nodes.append(TextNode(original_text, TextType.NORMAL_TEXT))
+        return new_nodes
     
     def split_nodes_image(old_nodes):
-        new_lst = []
-        image_pattern = r"!\[([^\[\]]*)\]\(([^\(\)]*)\)"
-        for node in old_nodes:
-            if not isinstance(node, TextNode) or node.text_type != TextType.NORMAL_TEXT:
-                new_lst.append(node)
+        new_nodes = []
+        for old_node in old_nodes:
+            if old_node.text_type != TextType.NORMAL_TEXT:
+                new_nodes.append(old_node)
                 continue
-            parts = re.split(image_pattern, node.text)
-            for i in range(len(parts)):
-                if i % 3 == 0 and parts[i]:  # Normal text
-                    new_lst.append(TextNode(parts[i], TextType.NORMAL_TEXT))
-                elif i % 3 == 1:  # Image alt text
-                    alt_text = parts[i]
-                    url = parts[i + 1] if i + 1 < len(parts) else ""
-                    new_lst.append(TextNode(alt_text, TextType.IMAGE_TEXT, url))
-        return [node for node in new_lst if node.text]
+            original_text = old_node.text
+            images = TextNode.extract_markdown_images(original_text)
+            if len(images) == 0:
+                new_nodes.append(old_node)
+                continue
+            for image in images:
+                sections = original_text.split(f"![{image[0]}]({image[1]})", 1)
+                if len(sections) != 2:
+                    raise ValueError("Invalid markdown, image section not closed")
+                if sections[0] != "":
+                    new_nodes.append(TextNode(sections[0], TextType.NORMAL_TEXT))
+                new_nodes.append(
+                    TextNode(
+                        image[0],
+                        TextType.IMAGE_TEXT,
+                        image[1],
+                    )
+                )
+                original_text = sections[1]
+            if original_text != "":
+                new_nodes.append(TextNode(original_text, TextType.NORMAL_TEXT))
+        return new_nodes
+    
+    def text_to_textnodes(text):
+        return 
         
 
     
