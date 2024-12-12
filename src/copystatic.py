@@ -12,4 +12,4 @@ def copy_files_recursive(source_dir_path, dest_dir_path):
         if os.path.isfile(from_path):
             shutil.copy(from_path, dest_path)
         else:
-            copy_files_recursive(from_path, dest_path)
+            copy_files_recursive(from_path, dest_path) # recursive call if a directory
