@@ -1,5 +1,5 @@
 import unittest
-from markdown_blocks import markdown_to_blocks, block_to_block_type, block_to_html_node, markdown_to_html, text_to_children, HTMLNode
+from markdown_blocks import extract_title, markdown_to_blocks, block_to_block_type, block_to_html_node, markdown_to_html, text_to_children, HTMLNode
 
 class TestMarkdownToHTML(unittest.TestCase):
 
@@ -90,6 +90,10 @@ This is the same paragraph on a new line
         ], {})
     
         self.assertEqual(markdown_to_html(markdown), expected)
+
+    def test_extract_title(self):
+        markdown = "# This is the title\n\nThis is a paragraph"
+        self.assertEqual(extract_title(markdown), "This is the title")
     
 
 if __name__ == "__main__":
