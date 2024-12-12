@@ -10,7 +10,7 @@ This project is a simple static site generator that converts markdown files into
 - Supports nested directories for content
 
 ## Project Structure
-.
+```.
 ├── content
 │   └── index.md
 ├── public
@@ -28,6 +28,7 @@ This project is a simple static site generator that converts markdown files into
 │   ├── copystatic.py
 │   └── (other source files)
 └── main.sh
+```
 
 ## Getting Started
 ### Prerequisites
@@ -38,11 +39,12 @@ This project is a simple static site generator that converts markdown files into
 1. Clone the repo
 ```
 git clone https://github.com/yourusername/static-site-generator.git
-cd static-site-generator```
-
+cd static-site-generator
+```
 2. Install the required packages
 ```
-pip install markdown```
+pip install markdown
+```
 
 ## Usage
 1. Place your markdown content files in the content directory.
